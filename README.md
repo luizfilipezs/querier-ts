@@ -101,7 +101,7 @@ It also works on inner objects:
 
 #### `filterWhere()`
 
-The diffrences of `filterWhere` is that it only accepts an object and it ignores conditions whose values are `null` or `undefined`.
+The difference of `filterWhere` is that it only accepts an object and it ignores conditions whose values are `null` or `undefined`.
 
 ```ts
 let isActive: bool;
@@ -148,7 +148,7 @@ const firstEmail = Query.from(users)
 
 #### `column()`
 
-It returns the values of the first property of all objects.
+It returns the values of the first properties of all objects.
 
 ```ts
 const ids = Query.from(users).column();
@@ -162,17 +162,17 @@ const emails = Query.from(users)
   .column();
 ```
 
-#### `column()`
+#### `values()`
 
 It returns the values of all objects as arrays.
 
 ```ts
-const emails = Query.from(users)
+const data = Query.from(users)
   .select(['id', 'email'])
   .values();
 ```
 
-`emails` would be something like this:
+`data` would be something like this:
 
 ```ts
 [
@@ -185,7 +185,7 @@ const emails = Query.from(users)
 
 #### `orderBy()`
 
-Sorts the results. You can pass multiple arguments.
+Sorts the results. You can pass multiple arguments to it.
 
 ```ts
   .orderBy('name', 'id')
