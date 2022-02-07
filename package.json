@@ -44,5 +44,9 @@
   },
   "files": [
     "lib/**/*"
-  ]
+  ],
+  "dependencies": {
+    "reflect-metadata": "^0.1.13",
+    "utility-types": "^3.10.0"
+  }
 }
