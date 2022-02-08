@@ -68,7 +68,7 @@ Returns a boolean indicating whether any results exist.
 
 ### Filtering data
 
-#### `where()`
+#### `where(condition)`
 
 There are two types of parameters:
 
@@ -99,7 +99,7 @@ It also works on inner objects:
   })
 ```
 
-#### `filterWhere()`
+#### `filterWhere(condition)`
 
 The difference of `filterWhere` is that it only accepts an object and it ignores conditions whose values are `null` or `undefined`.
 
@@ -118,7 +118,7 @@ const filteredUsers = Query.from(users)
 
 ### Selecting specific data
 
-#### `select()`
+#### `select(columns)`
 
 This method can be combined with `scalar()`, `column()`, or `values()`. It determines which columns should be selected.
 
@@ -143,6 +143,8 @@ const firstEmail = Query.from(users)
   .select('email')
   .scalar();
 ```
+
+`false` is returned where there is no value.
 
 #### `column()`
 
@@ -181,7 +183,7 @@ const data = Query.from(users)
 
 ### Ordering results
 
-#### `orderBy()`
+#### `orderBy(...columns)`
 
 Sorts the results. You can pass multiple arguments to it.
 
@@ -202,7 +204,7 @@ const lastId = Query.from(users)
 
 ### Limiting results
 
-#### `limit()`
+#### `limit(limit)`
 
 This method can be used to set a limit of results.
 
@@ -212,7 +214,7 @@ This method can be used to set a limit of results.
 
 >Passing a float or a negative number will throw an `InvalidArgumentError`.
 
-#### `skip()`
+#### `skip(numberOfRows)`
 
 Skips the first results.
 
