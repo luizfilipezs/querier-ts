@@ -116,7 +116,7 @@ export class Query<T extends object> {
   /**
    * Applies conditions to the query.
    * 
-   * @param {QueryConditionGroup<T> | ((obj: T) => boolean)} conditions Filter to
+   * @param {QueryConditionGroup<T> | ((obj: T) => boolean)} condition Filter to
    * be applied to the query.
    * 
    * If a callback function is provided, it must return a boolean value.
@@ -127,8 +127,8 @@ export class Query<T extends object> {
    * 
    * @returns {this} Current query.
    */
-  where(conditions: QueryConditionsGroup<T> | ((obj: T) => boolean)): this {
-    this.filterRows(conditions);
+  where(condition: QueryConditionsGroup<T> | ((obj: T) => boolean)): this {
+    this.filterRows(condition);
 
     return this;
   }
@@ -137,16 +137,16 @@ export class Query<T extends object> {
    * Applies a set of conditions to the query ignoring `null` and `undefined`
    * values as conditions.
    * 
-   * @param {QueryConditionGroupNullable<T>} conditions An object where each
+   * @param {QueryConditionGroupNullable<T>} condition An object where each
    * property represents an attribute to be validated. The values can be
    * literal or callback functions that return a boolean. If `null` or `undefined`
    * is passed, that condition will be skipped.
    * 
    * @returns {this} Current query.
    */
-  filterWhere(conditions: QueryConditionsGroupNullable<T>): this {
+  filterWhere(condition: QueryConditionsGroupNullable<T>): this {
     this.ignoreNullValues = true;
-    this.filterRows(conditions);
+    this.filterRows(condition);
     this.ignoreNullValues = false;
 
     return this;
@@ -155,14 +155,14 @@ export class Query<T extends object> {
   /**
    * Adds ordering to the results.
    * 
-   * @param {(PropOf<T> | keyof addPrefixToObject<PropertyOnly<T>, '-'>)[]} fields
-   * Ascending or descending fields. To mark a field as descending, use `-` before
+   * @param {(PropOf<T> | keyof addPrefixToObject<PropertyOnly<T>, '-'>)[]} columns
+   * Ascending or descending columns. To mark a field as descending, use `-` before
    * its name.
    * 
    * @returns {this} Current query.
    */
-  orderBy(...fields: (PropOf<T> | keyof addPrefixToObject<PropertyOnly<T>, '-'>)[]): this {
-    this.#rows.sort(sortByProperties(...fields as string[]));
+  orderBy(...columns: (PropOf<T> | keyof addPrefixToObject<PropertyOnly<T>, '-'>)[]): this {
+    this.#rows.sort(sortByProperties(...columns as string[]));
 
     return this;
   }
