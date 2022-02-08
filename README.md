@@ -220,4 +220,13 @@ Skips the first results.
   .skip(5)
 ```
 
+Example:
+
+```ts
+const secondId = Query.from(users)
+  .select('id')
+  .skip(1) // skips the first user
+  .scalar();
+```
+
 >Passing a float or a negative number will throw an `InvalidArgumentError`.
