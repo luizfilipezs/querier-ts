@@ -107,7 +107,7 @@ The difference of `filterWhere` is that it only accepts an object and it ignores
 let isActive: bool;
 
 const filteredUsers = Query.from(users)
-  .where({
+  .filterWhere({
     id: 1,
     isActive: isActive, // this condition will be skipped
   })
@@ -120,14 +120,12 @@ const filteredUsers = Query.from(users)
 
 #### `select()`
 
-This method can be combined with `scalar()`, `column()`, or `values()`.
+This method can be combined with `scalar()`, `column()`, or `values()`. It determines which columns should be selected.
 
-Usage:
+It accepts a string containing a single column name or an array of column names.
 
 ```ts
-const userIds = Query.from(users)
   .select('id')
-  .column();
 ```
 
 #### `scalar()`
@@ -206,13 +204,13 @@ const lastId = Query.from(users)
 
 #### `limit()`
 
-Can be used to set a limit of results.
+This method be used to set a limit of results.
 
 ```ts
   .limit(100)
 ```
 
->Passing a float or a negative number will throw an exception.
+>Passing a float or a negative number will throw an `InvalidArgumentError`.
 
 #### `skip()`
 
@@ -222,4 +220,4 @@ Skips the first results.
   .skip(5)
 ```
 
->Passing a float or a negative number will throw an exception.
+>Passing a float or a negative number will throw an `InvalidArgumentError`.
