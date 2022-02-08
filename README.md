@@ -30,7 +30,7 @@ const users: User[] = [
 ];
 ```
 
-## Query
+## `Query`
 
 A `Query` can be created this way:
 
@@ -204,7 +204,7 @@ const lastId = Query.from(users)
 
 #### `limit()`
 
-This method be used to set a limit of results.
+This method can be used to set a limit of results.
 
 ```ts
   .limit(100)
