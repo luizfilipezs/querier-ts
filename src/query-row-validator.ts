@@ -118,7 +118,7 @@ export class QueryRowValidator<T extends object> extends BaseObject {
    */
   private validateInnerObject<O extends object>(obj: O, conditionsObject: QueryConditionsGroupNullable<O>): boolean {
     return QueryRowValidator.validate(obj, {
-      conditionsObject: conditionsObject,
+      conditionsObject,
       ignoreNullValues: this.ignoreNullValues,
     });
   }

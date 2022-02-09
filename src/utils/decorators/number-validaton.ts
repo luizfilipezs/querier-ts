@@ -19,11 +19,11 @@ interface ParameterConfig {
  * @returns Decorator function.
  */
 export function min(value: number) {
-  return function (target: Object, propertyKey: string | symbol, parameterIndex: number) {
+  return (target: object, propertyKey: string | symbol, parameterIndex: number) => {
     const minParameters: ParameterConfig[] = Reflect.getOwnMetadata(minMetadataKey, target, propertyKey) || [];
   
     minParameters.push({
-      value: value,
+      value,
       index: parameterIndex,
     });
   
@@ -39,11 +39,11 @@ export function min(value: number) {
  * @returns Decorator function.
  */
 export function max(value: number) {
-  return function (target: Object, propertyKey: string | symbol, parameterIndex: number) {
+  return (target: object, propertyKey: string | symbol, parameterIndex: number) => {
     const maxParameters: ParameterConfig[] = Reflect.getOwnMetadata(maxMetadataKey, target, propertyKey) || [];
   
     maxParameters.push({
-      value: value,
+      value,
       index: parameterIndex,
     });
   
@@ -58,7 +58,7 @@ export function max(value: number) {
  * @param {string} propertyKey Method name.
  * @param {number} parameterIndex Parameter index.
  */
-export function integer(target: Object, propertyKey: string | symbol, parameterIndex: number) {
+export function integer(target: object, propertyKey: string | symbol, parameterIndex: number) {
   const integerParameters: ParameterConfig[] = Reflect.getOwnMetadata(integerMetadataKey, target, propertyKey) || [];
 
   integerParameters.push({
@@ -97,14 +97,14 @@ export function validateNumbers(target: any, propertyName: string, descriptor: T
 function checkMinParams(methodName: string, params: ParameterConfig[], actualArguments: IArguments) {
   for (const parameter of params) {
     const actualValue = actualArguments[parameter.index];
-    const min = parameter.value!;
+    const minValue = parameter.value!;
 
-    if (!isNumber(actualValue) || actualValue < min) {
+    if (!isNumber(actualValue) || actualValue < minValue) {
       throw new InvalidArgumentError({
         method: methodName,
         param: parameter.index,
         argument: actualValue,
-        expected: `equal or greater than ${min}`,
+        expected: `equal or greater than ${minValue}`,
       });
     }
   }
@@ -113,14 +113,14 @@ function checkMinParams(methodName: string, params: ParameterConfig[], actualArg
 function checkMaxParams(methodName: string, params: ParameterConfig[], actualArguments: IArguments) {
   for (const parameter of params) {
     const actualValue = actualArguments[parameter.index];
-    const max = parameter.value!;
+    const maxValue = parameter.value!;
 
-    if (!isNumber(actualValue) || actualValue > max) {
+    if (!isNumber(actualValue) || actualValue > maxValue) {
       throw new InvalidArgumentError({
         method: methodName,
         param: parameter.index,
         argument: actualValue,
-        expected: `equal or less than ${max}`,
+        expected: `equal or less than ${maxValue}`,
       });
     }
   }
