@@ -116,7 +116,7 @@ export class Query<T extends object> {
   /**
    * Applies conditions to the query.
    * 
-   * @param {QueryConditionGroup<T> | ((obj: T) => boolean)} condition Filter to
+   * @param {QueryConditionsGroup<T> | ((obj: T) => boolean)} condition Filter to
    * be applied to the query.
    * 
    * If a callback function is provided, it must return a boolean value.
@@ -137,7 +137,7 @@ export class Query<T extends object> {
    * Applies a set of conditions to the query ignoring `null` and `undefined`
    * values as conditions.
    * 
-   * @param {QueryConditionGroupNullable<T>} condition An object where each
+   * @param {QueryConditionsGroupNullable<T>} condition An object where each
    * property represents an attribute to be validated. The values can be
    * literal or callback functions that return a boolean. If `null` or `undefined`
    * is passed, that condition will be skipped.
@@ -321,7 +321,7 @@ export class Query<T extends object> {
   /**
    * Filters the rows according to the given conditions.
    * 
-   * @param {QueryConditionGroupNullable<T> | ((obj: T) => boolean)} condition
+   * @param {QueryConditionsGroupNullable<T> | ((obj: T) => boolean)} condition
    * Object or callback function.
    */
   private filterRows(condition: QueryConditionsGroupNullable<T> | ((obj: T) => boolean)): void {
@@ -336,7 +336,7 @@ export class Query<T extends object> {
    * Validates a row based on the given conditions object.
    * 
    * @param {T} row Row to validate.
-   * @param {QueryConditionGroupNullable<T>} condition Conditions object.
+   * @param {QueryConditionsGroupNullable<T>} condition Conditions object.
    * 
    * @returns {boolean} Validation result.
    */

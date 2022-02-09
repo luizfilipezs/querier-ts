@@ -115,7 +115,7 @@ export class QueryRowValidator<T extends object> extends BaseObject {
    * Validates an object inside the row.
    * 
    * @param {object} obj Object to validated.
-   * @param {QueryConditionGroupNullable<O>} conditionsObject Conditions to be applied to the object.
+   * @param {QueryConditionsGroupNullable<O>} conditionsObject Conditions to be applied to the object.
    * 
    * @returns {boolean} Validation result.
    */
