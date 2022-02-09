@@ -1,7 +1,6 @@
 import { PartialOfProperties } from './utils/types';
 
 export abstract class BaseObject {
-
   constructor(init: PartialOfProperties<BaseObject> = {}) {
     this.setAttributes(init as Partial<this>);
   }
@@ -13,5 +12,4 @@ export abstract class BaseObject {
   setAttributes(attributes: PartialOfProperties<this>): void {
     Object.assign(this, attributes);
   }
-
 }

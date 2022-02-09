@@ -9,20 +9,19 @@ import { isFunction, isObject } from './utils/functions/type-guards';
 interface QueryRowValidatorInitializer<T extends object> {
   conditionsObject: QueryConditionsGroupNullable<T>;
   ignoreNullValues: boolean;
-};
+}
 
 /**
  * Condition to apply to a row column.
  */
-type ColumnCondition<T extends object, P extends keyof T> = T[P] extends object ?
-  QueryConditionsGroupNullable<T[P]> | undefined :
-  T[P] | ((value: T[P]) => boolean) | null | undefined;
+type ColumnCondition<T extends object, P extends keyof T> = T[P] extends object
+  ? QueryConditionsGroupNullable<T[P]> | undefined
+  : T[P] | ((value: T[P]) => boolean) | null | undefined;
 
 /**
  * Validates a row in the query.
  */
 export class QueryRowValidator<T extends object> extends BaseObject {
-
   /**
    * Row to be validated.
    */
@@ -41,7 +40,7 @@ export class QueryRowValidator<T extends object> extends BaseObject {
 
   /**
    * Initializes the validator.
-   * 
+   *
    * @param {T} row Row to validated.
    * @param {QueryRowValidatorInitializer<T>} config Validator configuration.
    */
@@ -51,7 +50,7 @@ export class QueryRowValidator<T extends object> extends BaseObject {
 
   /**
    * Validates a row.
-   * 
+   *
    * @param {T} row Row to validated.
    * @param {QueryRowValidatorInitializer<T>} config Validator configuration.
    */
@@ -61,7 +60,7 @@ export class QueryRowValidator<T extends object> extends BaseObject {
 
   /**
    * Applies the validation to the row.
-   * 
+   *
    * @returns {boolean} `true` if the row is valid, `false` otherwise.
    */
   private validate(): boolean {
@@ -70,27 +69,25 @@ export class QueryRowValidator<T extends object> extends BaseObject {
 
   /**
    * Validates every condition.
-   * 
+   *
    * @returns {boolean} Validation result.
    */
   private validateConditions(): boolean {
     const conditionsEntries = getEntries(this.conditionsObject);
 
-    return conditionsEntries.every(([columnName, condition]) => (
-      this.validateColumnCondition(columnName, condition)
-    ));
+    return conditionsEntries.every(([columnName, condition]) => this.validateColumnCondition(columnName, condition));
   }
 
   /**
    * Validate a condition to a specific column.
-   * 
+   *
    * @param {P} columnName Column name.
    * @param {ColumnCondition<T, P>} condition Condition to be validated.
-   * 
+   *
    * @returns {boolean} Validation result.
    */
   private validateColumnCondition<P extends keyof T>(columnName: P, condition: ColumnCondition<T, P>): boolean {
-    if (this.ignoreNullValues && condition === null || condition === undefined) {
+    if (this.ignoreNullValues && (condition === null || condition === undefined)) {
       return true;
     }
 
@@ -113,10 +110,10 @@ export class QueryRowValidator<T extends object> extends BaseObject {
 
   /**
    * Validates an object inside the row.
-   * 
+   *
    * @param {object} obj Object to validated.
    * @param {QueryConditionsGroupNullable<O>} conditionsObject Conditions to be applied to the object.
-   * 
+   *
    * @returns {boolean} Validation result.
    */
   private validateInnerObject<O extends object>(obj: O, conditionsObject: QueryConditionsGroupNullable<O>): boolean {
@@ -125,5 +122,4 @@ export class QueryRowValidator<T extends object> extends BaseObject {
       ignoreNullValues: this.ignoreNullValues,
     });
   }
-
 }

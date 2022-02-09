@@ -8,7 +8,7 @@ import { integer, min, validateNumbers } from './utils/decorators/number-validat
 
 /**
  * Allows filtering data from an array of objects.
- * 
+ *
  * @example
  * ```ts
  * interface User {
@@ -18,42 +18,41 @@ import { integer, min, validateNumbers } from './utils/decorators/number-validat
  *   createdAt: string;
  *   updatedAt: string;
  * }
- * 
+ *
  * const users: User[] = [];
- * 
+ *
  * // Filtering objects
- * 
+ *
  * const activeGmailUsers = Query.from(users)
  *   .where({
  *     isActive: true,
  *     email: (email) => email.endsWith('@gmail.com'),
  *   })
  *   .all();
- * 
+ *
  * // Selecting specific data
- * 
+ *
  * const userEmails = Query.from(users)
  *   .select('email')
  *   .column();
- * 
+ *
  * const lastUserId = Query.from(users)
  *   .select('id')
  *   .orderBy('-createdAt')
  *   .scalar();
- * 
+ *
  * // Checking information
- * 
+ *
  * const userExists = Query.from(users)
  *   .where({
  *     id: 'some-id',
  *   })
  *   .exists();
- * 
+ *
  * const numberOfUsers = Query.from(users).count();
  * ```
  */
 export class Query<T extends object> {
-
   /**
    * Rows to be queried.
    */
@@ -82,7 +81,7 @@ export class Query<T extends object> {
 
   /**
    * Initializes the query.
-   * 
+   *
    * @param {T[]} rows Rows to be queried.
    */
   private constructor(rows: T[]) {
@@ -91,9 +90,9 @@ export class Query<T extends object> {
 
   /**
    * Creates a new query based on the given data.
-   * 
+   *
    * @param {T[]} rows Rows to be queried.
-   * 
+   *
    * @returns {Query<T>} Query to the given rows.
    */
   static from<T extends object>(rows: T[]): Query<T> {
@@ -102,10 +101,10 @@ export class Query<T extends object> {
 
   /**
    * Defines specific columns to be returned on the final results.
-   * 
+   *
    * @param {PropOf<T> | PropOf<T>[]} columns Selected columns.
-   * 
-   * @returns {this} Current query. 
+   *
+   * @returns {this} Current query.
    */
   select(columns: PropOf<T> | PropOf<T>[]): this {
     this.#columns = Array.isArray(columns) ? columns : [columns];
@@ -115,16 +114,16 @@ export class Query<T extends object> {
 
   /**
    * Applies conditions to the query.
-   * 
+   *
    * @param {QueryConditionsGroup<T> | ((obj: T) => boolean)} condition Filter to
    * be applied to the query.
-   * 
+   *
    * If a callback function is provided, it must return a boolean value.
-   * 
+   *
    * If an object is provided, its properties must be attributes of `T` and their
    * corresponding values must be the expected values for the attributes or a
    * callback functions that return boolean values.
-   * 
+   *
    * @returns {this} Current query.
    */
   where(condition: QueryConditionsGroup<T> | ((obj: T) => boolean)): this {
@@ -136,12 +135,12 @@ export class Query<T extends object> {
   /**
    * Applies a set of conditions to the query ignoring `null` and `undefined`
    * values as conditions.
-   * 
+   *
    * @param {QueryConditionsGroupNullable<T>} condition An object where each
    * property represents an attribute to be validated. The values can be
    * literal or callback functions that return a boolean. If `null` or `undefined`
    * is passed, that condition will be skipped.
-   * 
+   *
    * @returns {this} Current query.
    */
   filterWhere(condition: QueryConditionsGroupNullable<T>): this {
@@ -154,22 +153,22 @@ export class Query<T extends object> {
 
   /**
    * Adds ordering to the results.
-   * 
+   *
    * @param {(PropOf<T> | keyof addPrefixToObject<PropertyOnly<T>, '-'>)[]} columns
    * Ascending or descending columns. To mark a field as descending, use `-` before
    * its name.
-   * 
+   *
    * @returns {this} Current query.
    */
   orderBy(...columns: (PropOf<T> | keyof addPrefixToObject<PropertyOnly<T>, '-'>)[]): this {
-    this.#rows.sort(sortByProperties(...columns as string[]));
+    this.#rows.sort(sortByProperties(...(columns as string[])));
 
     return this;
   }
 
   /**
    * Returns the current number of rows.
-   * 
+   *
    * @return {number}
    */
   count(): number {
@@ -178,7 +177,7 @@ export class Query<T extends object> {
 
   /**
    * Checks if there is at least one row compatible with the query.
-   * 
+   *
    * @returns {boolean} Boolean indicating whether any row exists.
    */
   exists(): boolean {
@@ -187,7 +186,7 @@ export class Query<T extends object> {
 
   /**
    * Returns the first result.
-   * 
+   *
    * @returns {T}
    */
   first(): T | null {
@@ -198,7 +197,7 @@ export class Query<T extends object> {
 
   /**
    * Returns the last result.
-   * 
+   *
    * @returns {T}
    */
   last(): T | null {
@@ -209,7 +208,7 @@ export class Query<T extends object> {
 
   /**
    * Returns all results.
-   * 
+   *
    * @returns {T[]}
    */
   all(): T[] {
@@ -218,21 +217,19 @@ export class Query<T extends object> {
 
   /**
    * Returns the value of the first (selected) column of the first row.
-   * 
+   *
    * @returns {T[Promise<T>]|false} First value or `false`, if none row exists.
    */
   scalar(): T[PropOf<T>] | false {
     const firstObject = this.first();
     const firstColumn = this.getFirstColumn();
 
-    return firstObject && firstColumn ?
-      firstObject[firstColumn] ?? false :
-      false;
+    return firstObject && firstColumn ? firstObject[firstColumn] ?? false : false;
   }
 
   /**
    * Returns the values of the first (selected) column of all rows.
-   * 
+   *
    * @returns {T[Promise<T>][]} Values from the first (selected) column.
    */
   column(): T[PropOf<T>][] {
@@ -248,24 +245,23 @@ export class Query<T extends object> {
   /**
    * Returns the values of the rows. If there are selected columns, only their
    * values will be returned.
-   * 
+   *
    * @returns {T[PropOf<T>][][]} Array with the values of all rows.
    */
   values(): T[PropOf<T>][][] {
-    return this.getLimitedRows()
-      .map(
-        (row) => this.#columns.length ? this.#columns.map((column) => row[column]) : Object.values(row)
-      );
+    return this.getLimitedRows().map((row) =>
+      this.#columns.length ? this.#columns.map((column) => row[column]) : Object.values(row),
+    );
   }
 
   /**
    * Defines the number of rows to skip.
-   * 
+   *
    * @param {number} numberOfRows Numbers of rows to skip. Only non negative integer numbers
    * are allowed.
-   * 
+   *
    * @returns {this} Current query.
-   * 
+   *
    * @throws {InvalidArgumentError} If the given number is less than 0.
    */
   @validateNumbers
@@ -277,11 +273,11 @@ export class Query<T extends object> {
 
   /**
    * Defines a limit for the number of results.
-   * 
+   *
    * @param {number} limit Limit of results. Only non negative integer numbers are allowed.
-   * 
+   *
    * @returns {this} Current query.
-   * 
+   *
    * @throws {InvalidArgumentError} If the given limit is less than 0.
    */
   @validateNumbers
@@ -293,7 +289,7 @@ export class Query<T extends object> {
 
   /**
    * Returns the rows that should be used in the final results.
-   * 
+   *
    * @returns {T[]} Rows within the specified limit.
    */
   private getLimitedRows(): T[] {
@@ -302,7 +298,7 @@ export class Query<T extends object> {
 
   /**
    * Returns the first selected column or the first key of some row.
-   * 
+   *
    * @returns {Promise<T>|null} The first column or `null`, if none is selected
    * or there is no row.
    */
@@ -313,31 +309,27 @@ export class Query<T extends object> {
 
     const firstObject = this.first();
 
-    return firstObject ?
-      Object.keys(firstObject)[0] as PropOf<T> :
-      null;
+    return firstObject ? (Object.keys(firstObject)[0] as PropOf<T>) : null;
   }
 
   /**
    * Filters the rows according to the given conditions.
-   * 
+   *
    * @param {QueryConditionsGroupNullable<T> | ((obj: T) => boolean)} condition
    * Object or callback function.
    */
   private filterRows(condition: QueryConditionsGroupNullable<T> | ((obj: T) => boolean)): void {
     const isCallbackValidator = isFunction(condition);
 
-    this.#rows = this.#rows.filter((row) => (
-      isCallbackValidator ? condition(row) : this.validateRow(row, condition)
-    ));
+    this.#rows = this.#rows.filter((row) => (isCallbackValidator ? condition(row) : this.validateRow(row, condition)));
   }
 
   /**
    * Validates a row based on the given conditions object.
-   * 
+   *
    * @param {T} row Row to validate.
    * @param {QueryConditionsGroupNullable<T>} condition Conditions object.
-   * 
+   *
    * @returns {boolean} Validation result.
    */
   private validateRow(row: T, condition: QueryConditionsGroupNullable<T>): boolean {
@@ -346,5 +338,4 @@ export class Query<T extends object> {
       ignoreNullValues: this.ignoreNullValues,
     });
   }
-
 }
