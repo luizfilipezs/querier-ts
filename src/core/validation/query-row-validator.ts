@@ -38,13 +38,9 @@ export class QueryRowValidator {
         continue;
       }
 
-      const validated = this.validateColumnCondition(
-        row,
-        propName,
-        propCondition
-      );
+      const propValue = row[propName];
 
-      if (!validated) {
+      if (!this.validateValue(propValue, propCondition)) {
         return false;
       }
     }
@@ -60,26 +56,22 @@ export class QueryRowValidator {
    *
    * @returns Validation result.
    */
-  private static validateColumnCondition<
-    T extends object,
-    TColumn extends keyof T,
-  >(row: T, column: TColumn, condition: ColumnCondition<T, TColumn>): boolean {
-    const cellValue = row[column];
-
+  private static validateValue<T extends object, K extends keyof T>(
+    value: T[K],
+    condition: ColumnCondition<T, K>
+  ): boolean {
     if (isFunction(condition)) {
-      return (condition as AttributeValidationFunction<T, TColumn>)(cellValue);
+      return (condition as AttributeValidationFunction<T, K>)(value);
     }
 
     if (Array.isArray(condition)) {
-      return Array.isArray(cellValue)
-        ? compareArrays(cellValue, condition)
-        : false;
+      return Array.isArray(value) ? compareArrays(value, condition) : false;
     }
 
     if (isObject(condition)) {
-      return isObject(cellValue) ? this.validate(cellValue, condition) : false;
+      return isObject(value) ? this.validate(value, condition) : false;
     }
 
-    return cellValue === condition;
+    return value === condition;
   }
 }
