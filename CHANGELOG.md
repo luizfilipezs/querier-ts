@@ -9,7 +9,7 @@
 - [ ] New features
 - [x] Docs
 
-### Docsp
+### Docs
 
 - Updated `distinct()` method examples in README.
 
