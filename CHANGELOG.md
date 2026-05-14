@@ -1,5 +1,18 @@
 # Changelog
 
+## v2.12.2
+
+### Summary
+
+- [ ] Bug fixes
+- [ ] Refactoring
+- [ ] New features
+- [x] Docs
+
+### Docsp
+
+- Updated `distinct()` method examples in README.
+
 ## v2.12.1
 
 ### Summary
