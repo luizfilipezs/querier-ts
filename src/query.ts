@@ -415,7 +415,6 @@ export class Query<T extends object> {
     for (let i = 0; i < rows.length; i++) {
       const row = rows[i]!;
       const group = isFn ? partitionBy(row) : row[partitionBy];
-
       const count = counts.get(group) ?? 0;
 
       if (count < limit) {
@@ -905,11 +904,7 @@ export class Query<T extends object> {
 
     const columns = getObjectPropertyNames(firstRow);
 
-    if (columns.length > 0) {
-      return columns[0]!;
-    }
-
-    return null;
+    return columns[0] ?? null;
   }
 
   /**
