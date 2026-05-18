@@ -123,11 +123,7 @@ export class Query<T extends object> {
       rows.push(result);
     }
 
-    // create new query
-    const query = new Query(rows);
-    this.cloneStateInto(query);
-
-    return query;
+    return this.cloneWithRows(rows);
   }
 
   /**
@@ -139,12 +135,9 @@ export class Query<T extends object> {
   map<TReturn extends object>(
     callback: (row: T, index: number) => TReturn
   ): Query<TReturn> {
-    const rows = this.#rows.map(callback);
-    const query = new Query(rows);
+    const mappedRows = this.#rows.map(callback);
 
-    this.cloneStateInto(query);
-
-    return query;
+    return this.cloneWithRows(mappedRows);
   }
 
   /**
@@ -913,12 +906,17 @@ export class Query<T extends object> {
   }
 
   /**
-   * Copies the state of the current query into the given query.
+   * Returns a clone of the query with the specified rows.
    *
-   * @param query Query to copy the state into.
+   * @param rows Rows to be cloned.
+   * @returns Cloned query.
    */
-  private cloneStateInto<O extends object>(query: Query<O>): void {
+  private cloneWithRows<R extends object>(rows: R[]): Query<R> {
+    const query = new Query(rows);
+
     query.#startAt = this.#startAt;
     query.#limit = this.#limit;
+
+    return query;
   }
 }

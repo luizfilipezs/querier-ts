@@ -186,6 +186,12 @@ describe('Query', () => {
   });
 
   describe('selection', () => {
+    it('should infer return type', () => {
+      const query = Query.from(users).select('id', 'name');
+
+      expectType<Query<{ id: number; name: string }>>(query);
+    });
+
     describe('select()', () => {
       it('should select a single column', () => {
         const result = Query.from(users).select('name').column();
@@ -239,6 +245,15 @@ describe('Query', () => {
   });
 
   describe('mapping', () => {
+    it('should infer return type', () => {
+      const result = Query.from(users).map((user) => ({
+        id: user.id,
+        name: user.name,
+      }));
+
+      expectType<Query<{ id: number; name: string }>>(result);
+    });
+
     it('should map each row to a new object', () => {
       const result = Query.from(users).map((user) => ({
         id: user.id,
