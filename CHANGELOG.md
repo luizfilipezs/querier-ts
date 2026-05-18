@@ -1,5 +1,19 @@
 # Changelog
 
+## v2.12.3
+
+### Summary
+
+- [ ] Bug fixes
+- [x] Refactoring
+- [ ] New features
+- [ ] Breaking changes
+
+### Refactoring
+
+- Improved `map()` method performance by replacing `for...i` loop by `Array.map()` method.
+- Simplified other parts of the code.
+
 ## v2.12.2
 
 ### Summary
@@ -7,6 +21,7 @@
 - [ ] Bug fixes
 - [ ] Refactoring
 - [ ] New features
+- [ ] Breaking changes
 - [x] Docs
 
 ### Docs
