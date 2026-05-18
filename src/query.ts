@@ -139,16 +139,9 @@ export class Query<T extends object> {
   map<TReturn extends object>(
     callback: (row: T, index: number) => TReturn
   ): Query<TReturn> {
-    // map rows
-    const source = this.#rows;
-    const rows: TReturn[] = [];
-
-    for (let i = 0; i < source.length; i++) {
-      rows.push(callback(source[i]!, i));
-    }
-
-    // create new query
+    const rows = this.#rows.map(callback);
     const query = new Query(rows);
+
     this.cloneStateInto(query);
 
     return query;
