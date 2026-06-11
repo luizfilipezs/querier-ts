@@ -1,5 +1,18 @@
 # Changelog
 
+## v2.12.4
+
+### Summary
+
+- [ ] Bug fixes
+- [x] Refactoring
+- [ ] New features
+- [ ] Breaking changes
+
+### Refactoring
+
+- Removed unused type.
+
 ## v2.12.3
 
 ### Summary
