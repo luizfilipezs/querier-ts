@@ -3,7 +3,8 @@
   "compilerOptions": {
     "declaration": true,
     "declarationMap": false,
-    "sourceMap": false
+    "sourceMap": false,
+    "ignoreDeprecations": "6.0"
   },
   "include": [
     "src/**/*.ts",
