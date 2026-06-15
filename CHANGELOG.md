@@ -1,5 +1,19 @@
 # Changelog
 
+## v2.12.5
+
+### Summary
+
+- [ ] Bug fixes
+- [x] Refactoring
+- [ ] New features
+- [ ] Breaking changes
+
+### Refactoring
+
+- Optimized internal loops by caching repeated values before iteration.
+- Added an internal utility function to improve typing support.
+
 ## v2.12.4
 
 ### Summary
