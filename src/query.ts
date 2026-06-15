@@ -733,20 +733,10 @@ export class Query<T extends object> {
   /**
    * Returns the minimum value of a column.
    *
-   * @param key Column to get the minimum value from.
+   * @param key Column to get the minimum value from or callback to map the rows.
    * @returns Minimum value or `null`, if no rows exist.
    */
-  min<K extends KeysOfType<T, number>>(key: K): number | null;
-
-  /**
-   * Returns the minimum value of the mapped rows by a callback.
-   *
-   * @param callback Callback to map the rows.
-   * @returns Minimum value or `null`, if no rows exist.
-   */
-  min(callback: (row: T) => number): number | null;
-
-  min(arg: KeysOfType<T, number> | ((row: T) => number)): number | null {
+  min(column: KeysOfType<T, number> | ((row: T) => number)): number | null {
     const source = this.getLimitedRows();
     const length = source.length;
 
@@ -755,11 +745,11 @@ export class Query<T extends object> {
     }
 
     const values: number[] = [];
-    const isFn = isFunction(arg);
+    const isFn = isFunction(column);
 
     for (let i = 0; i < length; i++) {
       const row = source[i]!;
-      values.push(isFn ? arg(row) : (row[arg] as number));
+      values.push(isFn ? column(row) : (row[column] as number));
     }
 
     return Math.min(...values);
@@ -768,20 +758,10 @@ export class Query<T extends object> {
   /**
    * Returns the maximum value of a column.
    *
-   * @param key Column to get the maximum value from.
+   * @param key Column to get the maximum value from or callback to map the rows.
    * @returns Maximum value or `null`, if no rows exist.
    */
-  max<K extends KeysOfType<T, number>>(key: K): number | null;
-
-  /**
-   * Returns the maximum value of the mapped rows by a callback.
-   *
-   * @param callback Callback to map the rows.
-   * @returns Maximum value or `null`, if no rows exist.
-   */
-  max(callback: (row: T) => number): number | null;
-
-  max(arg: KeysOfType<T, number> | ((row: T) => number)): number | null {
+  max(column: KeysOfType<T, number> | ((row: T) => number)): number | null {
     const source = this.getLimitedRows();
     const length = source.length;
 
@@ -790,11 +770,11 @@ export class Query<T extends object> {
     }
 
     const values: number[] = [];
-    const isFn = isFunction(arg);
+    const isFn = isFunction(column);
 
     for (let i = 0; i < length; i++) {
       const row = source[i]!;
-      values.push(isFn ? arg(row) : (row[arg] as number));
+      values.push(isFn ? column(row) : (row[column] as number));
     }
 
     return Math.max(...values);
@@ -803,20 +783,10 @@ export class Query<T extends object> {
   /**
    * Returns the sum of the values of a column.
    *
-   * @param key Column to get the sum from.
+   * @param key Column to get the sum from or callback to map the rows.
    * @returns Sum.
    */
-  sum<K extends KeysOfType<T, number>>(key: K): number;
-
-  /**
-   * Returns the sum of the mapped rows by a callback.
-   *
-   * @param callback Callback to map the rows.
-   * @returns Sum.
-   */
-  sum(callback: (row: T) => number): number;
-
-  sum(arg: KeysOfType<T, number> | ((row: T) => number)): number {
+  sum(column: KeysOfType<T, number> | ((row: T) => number)): number {
     const source = this.getLimitedRows();
     const length = source.length;
 
@@ -825,11 +795,11 @@ export class Query<T extends object> {
     }
 
     const values: number[] = [];
-    const isFn = isFunction(arg);
+    const isFn = isFunction(column);
 
     for (let i = 0; i < length; i++) {
       const row = source[i]!;
-      values.push(isFn ? arg(row) : (row[arg] as number));
+      values.push(isFn ? column(row) : (row[column] as number));
     }
 
     return values.reduce((total, value) => total + value, 0);
@@ -838,27 +808,17 @@ export class Query<T extends object> {
   /**
    * Returns the average of the values of a column.
    *
-   * @param key Column to get the average from.
+   * @param key Column to get the average from or allback to map the rows.
    * @returns Average or `null`, if no rows exist.
    */
-  average<K extends KeysOfType<T, number>>(key: K): number | null;
-
-  /**
-   * Returns the average of the mapped rows by a callback.
-   *
-   * @param callback Callback to map the rows.
-   * @returns Average or `null`, if no rows exist.
-   */
-  average(callback: (row: T) => number): number | null;
-
-  average(arg: KeysOfType<T, number> | ((row: T) => number)): number | null {
+  average(column: KeysOfType<T, number> | ((row: T) => number)): number | null {
     const count = this.count();
 
     if (count === 0) {
       return null;
     }
 
-    const sum = isFunction(arg) ? this.sum(arg) : this.sum(arg);
+    const sum = this.sum(column);
 
     return sum / count;
   }
