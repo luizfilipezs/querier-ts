@@ -1,4 +1,4 @@
-import { defineConfig } from 'tsup';
+import { defineConfig } from 'tsdown';
 
 export default defineConfig([
   // ESM build
@@ -9,9 +9,7 @@ export default defineConfig([
     dts: true,
     minify: false,
     treeshake: true,
-    bundle: true,
     sourcemap: false,
-    splitting: false,
     target: 'es2022',
     platform: 'neutral',
     tsconfig: 'tsconfig.build.json',
@@ -25,9 +23,7 @@ export default defineConfig([
     dts: false,
     minify: false,
     treeshake: true,
-    bundle: true,
     sourcemap: false,
-    splitting: false,
     target: 'es2022',
     platform: 'neutral',
     tsconfig: 'tsconfig.build.json',

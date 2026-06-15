@@ -3,11 +3,10 @@
   "compilerOptions": {
     "declaration": true,
     "declarationMap": false,
-    "sourceMap": false,
-    "ignoreDeprecations": "6.0"
+    "sourceMap": false
   },
   "include": [
-    "src/**/*.ts",
+    "src/**/*.ts"
   ],
   "exclude": [
     "src/**/__tests__/*"
