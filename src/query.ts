@@ -10,6 +10,7 @@ import {
 } from './core/validation/decorators/number-validaton';
 import { QueryRowValidator } from './core/validation/query-row-validator';
 import { getObjectPropertyNames } from './utils/functions/generic/get-object-property-names';
+import { getRecordValues } from './utils/functions/generic/get-record-values';
 import { sortByCallback } from './utils/functions/sort/sort-by-callback';
 import { sortByProperties } from './utils/functions/sort/sort-by-properties';
 import { isFunction } from './utils/functions/type-guards/is-function';
@@ -243,11 +244,11 @@ export class Query<T extends object> {
 
   orderBy(...arg: unknown[]): this {
     if (arg.length > 0) {
-      this.#rows = this.#rows.sort(
-        isFunction(arg[0])
-          ? sortByCallback(arg[0], arg[1] === 'desc' ? -1 : 1)
-          : sortByProperties(...(arg as OrderingColumn<T>[]))
-      );
+      const sortFn = isFunction(arg[0])
+        ? sortByCallback(arg[0], arg[1] === 'desc' ? -1 : 1)
+        : sortByProperties(...(arg as OrderingColumn<T>[]));
+
+      this.#rows = this.#rows.sort(sortFn);
     }
 
     return this;
@@ -532,12 +533,14 @@ export class Query<T extends object> {
 
     const values: unknown[] = [];
 
-    for (let i = 0; i < length; i++) {
-      const row = source[i]!;
-
-      values.push(
-        isFunction(columnOrMapFn) ? columnOrMapFn(row) : row[columnOrMapFn]
-      );
+    if (isFunction(columnOrMapFn)) {
+      for (let i = 0; i < length; i++) {
+        values.push(columnOrMapFn(source[i]!));
+      }
+    } else {
+      for (let i = 0; i < length; i++) {
+        values.push(source[i]![columnOrMapFn]);
+      }
     }
 
     return values;
@@ -556,7 +559,7 @@ export class Query<T extends object> {
     const rows: _Values[] = [];
 
     for (let i = 0; i < source.length; i++) {
-      rows.push(Object.values(source[i]!) as _Values);
+      rows.push(getRecordValues(source[i]!));
     }
 
     return rows;
