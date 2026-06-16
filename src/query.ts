@@ -149,31 +149,21 @@ export class Query<T extends object> {
   }
 
   /**
-   * Removes duplicate rows based on a key.
+   * Removes duplicate rows based on a key or callback function.
    *
-   * @param key Key to be used for comparison.
+   * @param column Key or callback function to use for comparison.
    * @returns Current query.
    */
-  distinct<K extends PropOf<T>>(key: K): this;
-
-  /**
-   * Removes duplicate rows based on a function.
-   *
-   * @param fn Function to be used for comparison.
-   * @returns Current query.
-   */
-  distinct<TValue>(fn: (row: T) => TValue): this;
-
-  distinct<K extends PropOf<T>, TValue>(arg: K | ((row: T) => TValue)): this {
+  distinct(column: PropOf<T> | ((row: T) => unknown)): this {
     const seen = new Set<unknown>();
     const result: T[] = [];
 
     const rows = this.#rows;
-    const isFn = isFunction(arg);
+    const isFn = isFunction(column);
 
     for (let i = 0; i < rows.length; i++) {
       const row = rows[i]!;
-      const value = isFn ? arg(row) : row[arg];
+      const value = isFn ? column(row) : row[column];
 
       if (!seen.has(value)) {
         seen.add(value);
