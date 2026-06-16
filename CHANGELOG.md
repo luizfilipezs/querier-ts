@@ -1,5 +1,23 @@
 # Changelog
 
+## v2.12.6
+
+### Summary
+
+- [ ] Bug fixes
+- [x] Refactoring
+- [ ] New features
+- [ ] Breaking changes
+- [x] Chore
+
+### Refactoring
+
+- Consolidated the overloads of `distinct()`, `min()`, `max()`, `sum()`, and `average()` into a single signature per method.
+
+### Chore
+
+- Migrated the build process from `tsup` to `tsdown`.
+
 ## v2.12.5
 
 ### Summary
