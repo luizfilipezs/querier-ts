@@ -2,7 +2,7 @@
   "name": "in-memory-query",
   "type": "module",
   "version": "2.12.5",
-  "description": "A lightweight, type-safe in-memory query engine for JavaScript and TypeScript",
+  "description": "A lightweight, type-safe in-memory query engine with powerful TypeScript inference.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/luizfilipezs/in-memory-query.git"

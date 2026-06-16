@@ -2,7 +2,7 @@
 In-Memory Query
 </h1>
 <p align="center">
-A lightweight, type-safe in-memory query engine for JavaScript and TypeScript.
+A lightweight, type-safe in-memory query engine with powerful TypeScript inference.
 <p>
 <p align="center">
   <a href="https://www.npmjs.com/package/in-memory-query"><img src="https://img.shields.io/npm/v/in-memory-query.svg" alt="current in-memory-query version badge"></a>
