@@ -1,5 +1,34 @@
 # Changelog
 
+## v2.12.7
+
+### Summary
+
+- [x] Bug fixes
+- [ ] Refactoring
+- [ ] New features
+- [ ] Breaking changes
+- [ ] Chore
+
+### Bug fixes
+
+`filterWhere()` now correctly ignores `null` and `undefined` values in deep condition objects, ensuring these empty conditions are safely skipped during row evaluation.
+
+This is the expected behavior:
+
+```ts
+const activeBrazilianUsers = Query.from(users)
+  .filterWhere({
+    isActive: true,
+    address: {
+      country: 'Brazil',
+      city: null, // This condition will be skipped.
+      state: undefined, // This one too.
+    }
+  })
+  .all();
+```
+
 ## v2.12.6
 
 ### Summary
