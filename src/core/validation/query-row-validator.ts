@@ -40,7 +40,7 @@ export class QueryRowValidator {
 
       const propValue = row[propName];
 
-      if (!this.validateValue(propValue, propCondition)) {
+      if (!this.validateValue(propValue, propCondition, options)) {
         return false;
       }
     }
@@ -58,7 +58,8 @@ export class QueryRowValidator {
    */
   private static validateValue<T extends object, K extends keyof T>(
     value: T[K],
-    condition: ColumnCondition<T, K>
+    condition: ColumnCondition<T, K>,
+    options: ValidationOptions
   ): boolean {
     if (isFunction(condition)) {
       return (condition as AttributeValidationFunction<T, K>)(value);
@@ -69,7 +70,7 @@ export class QueryRowValidator {
     }
 
     if (isObject(condition)) {
-      return isObject(value) ? this.validate(value, condition) : false;
+      return isObject(value) ? this.validate(value, condition, options) : false;
     }
 
     return value === condition;

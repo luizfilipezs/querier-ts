@@ -144,13 +144,57 @@ describe('Query', () => {
       it('should ignore null conditions', () => {
         const result = Query.from(users)
           .filterWhere({
-            isActive: null,
+            isActive: null, // should be skipped
             id: 1,
           })
           .all();
 
         expect(result).toHaveLength(1);
-        expect(result[0]!.id).toBe(1);
+
+        // avoid false positives
+        const [firstRow] = result;
+
+        expect(firstRow!.id).toBe(1);
+        expect(firstRow!.isActive).not.toBeNull();
+      });
+
+      it('should ignore undefined conditions', () => {
+        const result = Query.from(users)
+          .filterWhere({
+            isActive: undefined, // should be skipped
+            id: 1,
+          })
+          .all();
+
+        expect(result).toHaveLength(1);
+
+        // avoid false positives
+        const [firstRow] = result;
+
+        expect(firstRow!.id).toBe(1);
+        expect(firstRow!.isActive).not.toBeUndefined();
+      });
+
+      it('should work with deep conditions', () => {
+        const result = Query.from(users)
+          .filterWhere({
+            address: {
+              id: undefined, // should be skipped
+              country: null, // should be skipped
+              city: 'Brasília',
+            },
+          })
+          .all();
+
+        expect(result).toHaveLength(1);
+
+        // avoid false positives
+        const [firstRow] = result;
+
+        expect(firstRow!.id).toBe(1);
+        expect(firstRow!.address.city).toBe('Brasília');
+        expect(firstRow!.address.id).not.toBeUndefined();
+        expect(firstRow!.address.country).not.toBeNull();
       });
     });
 
