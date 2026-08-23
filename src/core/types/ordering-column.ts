@@ -3,5 +3,4 @@ import type { PropOf } from '../../utils/types/prop-of';
 import type { PropertyOnly } from '../../utils/types/property-only';
 
 export type OrderingColumn<T extends object> =
-  | PropOf<T>
-  | keyof addPrefixToObject<PropertyOnly<T>, '-'>;
+  PropOf<T> | keyof addPrefixToObject<PropertyOnly<T>, '-'>;
