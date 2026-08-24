@@ -188,6 +188,34 @@ describe('QueryRowValidator', () => {
       expect(result).toBe(false);
     });
 
+    it('should ignore null and undefined in nested conditions when ignoreNullValues is true', () => {
+      const row = { user: { name: 'Alice', age: 18 } };
+
+      const result = QueryRowValidator.validate(
+        row,
+        {
+          user: { name: null, age: undefined },
+        },
+        { ignoreNullValues: true }
+      );
+
+      expect(result).toBe(true);
+    });
+
+    it('should NOT ignore null and undefined in nested conditions when ignoreNullValues is false', () => {
+      const row = { user: { name: 'Alice', age: 18 } };
+
+      const result = QueryRowValidator.validate(
+        row,
+        {
+          user: { name: null, age: undefined },
+        },
+        { ignoreNullValues: false }
+      );
+
+      expect(result).toBe(false);
+    });
+
     it('should use default options (ignoreNullValues = false)', () => {
       const row = { name: 'Alice' };
 
