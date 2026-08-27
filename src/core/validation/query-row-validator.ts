@@ -4,6 +4,7 @@ import { isFunction } from '../../utils/functions/type-guards/is-function';
 import { isObject } from '../../utils/functions/type-guards/is-object';
 import type { AttributeValidationFunction } from '../types/attribute-validation-function';
 import type { ColumnCondition } from '../types/column-condition';
+import type { QueryConditionsGroupNullable } from '../types/query-conditions-group-nullable';
 import type { ValidationOptions } from '../types/validation-options';
 import type { WhereCondition } from '../types/where-condition';
 
@@ -38,9 +39,16 @@ export class QueryRowValidator {
         continue;
       }
 
-      const propValue = row[propName];
+      const key = propName as unknown as keyof T;
+      const propValue = row[key];
 
-      if (!this.validateValue(propValue, propCondition, options)) {
+      if (
+        !this.validateValue(
+          propValue,
+          propCondition as ColumnCondition<T, typeof key>,
+          options
+        )
+      ) {
         return false;
       }
     }
@@ -70,7 +78,13 @@ export class QueryRowValidator {
     }
 
     if (isObject(condition)) {
-      return isObject(value) ? this.validate(value, condition, options) : false;
+      return isObject(value)
+        ? this.validate(
+            value,
+            condition as QueryConditionsGroupNullable<object>,
+            options
+          )
+        : false;
     }
 
     return value === condition;

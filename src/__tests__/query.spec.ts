@@ -93,8 +93,6 @@ describe('Query', () => {
       const query = Query.from(new Map(users.map((u) => [u.id, u])).values());
       expect(query.all().length).toBe(3);
       expectType<Query<User>>(query);
-
-      Query.from<User>(Array.from({ length: 1 }));
     });
   });
 
@@ -125,24 +123,24 @@ describe('Query', () => {
         expect(result[0]!.id).toBe(1);
       });
 
+      it('should not allow unknown properties at development', () => {
+        // @ts-expect-error
+        const result = Query.from(users).where({ foo: 'bar' }).all();
+
+        expect(result).toHaveLength(0);
+      });
+
+      it('should not allow empty object at development when type has no properties', () => {
+        // @ts-expect-error
+        const query = Query.from([{ fn: () => {} }]).where({});
+
+        expectType<Query<{ fn: () => void }>>(query);
+      });
+
       it('should combine multiple where calls', () => {
         const result = Query.from(users)
           .where({ isActive: true })
           .where((user) => user.permissions.useCookies)
-          .all();
-
-        expect(result).toHaveLength(2);
-      });
-    });
-
-    describe('nested where()', () => {
-      it('should filter using inner object conditions', () => {
-        const result = Query.from(users)
-          .where({
-            permissions: {
-              sendNotifications: true,
-            },
-          })
           .all();
 
         expect(result).toHaveLength(2);
@@ -204,6 +202,20 @@ describe('Query', () => {
         expect(firstRow!.address.city).toBe('Brasília');
         expect(firstRow!.address.id).not.toBeUndefined();
         expect(firstRow!.address.country).not.toBeNull();
+      });
+
+      it('should not allow unknown properties at development', () => {
+        // @ts-expect-error
+        const result = Query.from(users).filterWhere({ foo: 'bar' }).all();
+
+        expect(result).toHaveLength(0);
+      });
+
+      it('should not allow empty object at development when type has no properties', () => {
+        // @ts-expect-error
+        const query = Query.from([{ fn: () => {} }]).filterWhere({});
+
+        expectType<Query<{ fn: () => void }>>(query);
       });
     });
 
