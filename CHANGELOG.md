@@ -1,5 +1,23 @@
 # Changelog
 
+## v2.12.8
+
+### Summary
+
+- [x] Bug fixes
+- [ ] Refactoring
+- [ ] New features
+- [ ] Breaking changes
+- [ ] Chore
+
+### Bug fixes
+
+Fixed a typing loophole in `QueryConditionsGroupNullable<T>` where types containing only methods would inadvertently disable excess property checks. 
+
+When a type passed to the `where` clause only contains methods, it previously resolved to `{}` (any non-nullish value), allowing arbitrary keys to be passed without compilation errors. The type now strictly evaluates to `never` when there are no valid data properties, forcing the consumer to use the callback function signature. 
+
+Internal type assertions in `QueryRowValidator` were also adjusted to satisfy the compiler due to these tightened type bounds.
+
 ## v2.12.7
 
 ### Summary
