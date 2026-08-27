@@ -107,6 +107,15 @@ describe('Query', () => {
         expect(result.every((u) => u.isActive)).toBe(true);
       });
 
+      it('should filter using deep object conditions', () => {
+        const result = Query.from(users)
+          .where({ address: { country: 'Brazil' } })
+          .all();
+
+        expect(result).toHaveLength(2);
+        expect(result.every((u) => u.address.country === 'Brazil')).toBe(true);
+      });
+
       it('should filter using function condition', () => {
         const result = Query.from(users)
           .where((user) => user.isAdmin())
